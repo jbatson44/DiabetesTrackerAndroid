@@ -1,8 +1,9 @@
 package batson.diabetestrack;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,7 +22,7 @@ public interface DiabetesDao {
     void insertInsulin(Insulin insulin);
 
     @Query("SELECT * FROM tbl_blood_sugar WHERE creation_date >= :beginTime AND creation_date <= :endTime")
-    List<BloodSugar> getBloodSugar(Date beginTime, Date endTime);
+    LiveData<List<BloodSugar>> getBloodSugar(Date beginTime, Date endTime);
 
     @Query("SELECT * FROM tbl_carb WHERE creation_date >= :beginTime AND creation_date <= :endTime")
     List<Carb> getCarb(Date beginTime, Date endTime);

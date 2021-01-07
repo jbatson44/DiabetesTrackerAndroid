@@ -13,15 +13,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DataViewModel dataViewModel;
+    private Date chosenDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        chosenDate = Calendar.getInstance().getTime();
         DiabetesDatabase db = Room.databaseBuilder(getApplicationContext(),
                 DiabetesDatabase.class, "diabetes-database").build();
 
@@ -63,7 +67,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button addBloodSugar = findViewById(R.id.addBloodSugar);
         addBloodSugar.setOnClickListener(v -> {
-
+            /*
+            EditText bsInput = findViewById(R.id.bloodSugarInput);
+            TextView bsTime = findViewById(R.id.bloodSugarTime);
+            int bsLevel = Integer.parseInt(bsInput.getText().toString());
+            Date bsDate = chosenDate;
+            bsDate.setHours(Integer.parseInt(bsTime.getText().toString().split(":")[0]));
+            bsDate.setMinutes(Integer.parseInt(bsTime.getText().toString().split(":")[1]));
+            BloodSugar bloodSugar = new BloodSugar();
+            bloodSugar.bsLevel = bsLevel;
+            bloodSugar.creationDate = bsDate;
+            dataViewModel.insert(bloodSugar);
+            */
         });
     }
 
