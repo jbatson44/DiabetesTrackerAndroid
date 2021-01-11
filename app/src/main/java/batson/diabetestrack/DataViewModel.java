@@ -11,18 +11,16 @@ import androidx.lifecycle.LiveData;
 public class DataViewModel extends AndroidViewModel {
     private DiabetesRepository diabetesRepository;
 
-    private final LiveData<List<BloodSugar>> bloodSugar;
+    private final LiveData<List<BloodSugar>> bloodSugarList;
 
     public DataViewModel (Application application) {
         super(application);
         diabetesRepository = new DiabetesRepository(application);
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        bloodSugar = diabetesRepository.getBloodSugarByDate(cal.getTime(), Calendar.getInstance().getTime());
+        bloodSugarList = diabetesRepository.getAllBloodSugar();
     }
 
-    LiveData<List<BloodSugar>> getBloodSugar() { return bloodSugar; }
+    LiveData<List<BloodSugar>> getBloodSugar() { return bloodSugarList; }
 
     public void insert(BloodSugar bloodSugar) { diabetesRepository.addBloodSugar(bloodSugar); }
 }

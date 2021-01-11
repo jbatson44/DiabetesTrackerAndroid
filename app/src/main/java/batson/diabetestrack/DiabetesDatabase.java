@@ -2,16 +2,20 @@ package batson.diabetestrack;
 
 import android.content.Context;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Insert;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {BloodSugar.class, Carb.class, Insulin.class}, version = 1)
+@Database(entities = {BloodSugar.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class DiabetesDatabase extends RoomDatabase {
     public abstract DiabetesDao diabetesDao();
@@ -26,10 +30,31 @@ public abstract class DiabetesDatabase extends RoomDatabase {
             synchronized (DiabetesDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            DiabetesDatabase.class, "diabetes_database").build();
+                            DiabetesDatabase.class, "diabetes_database")
+                            .addCallback(sRoomDatabaseCallback)
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
+
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            // If you want to keep data through app restarts,
+            // comment out the following block
+            databaseWriteExecutor.execute(() -> {
+                // Populate the database in the background.
+                // If you want to start with more words, just add them.
+                DiabetesDao dao = INSTANCE.diabetesDao();
+                dao.deleteAll();
+
+                BloodSugar bloodSugar = new BloodSugar(98, Calendar.getInstance().getTime());
+                dao.insertBloodSugar(bloodSugar);
+            });
+        }
+    };
 }

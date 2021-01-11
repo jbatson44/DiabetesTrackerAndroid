@@ -10,26 +10,21 @@ import androidx.lifecycle.LiveData;
 
 public class DiabetesRepository {
     private DiabetesDao diabetesDao;
-    private LiveData<List<BloodSugar>> bloodSugar;
+    private LiveData<List<BloodSugar>> bloodSugarList;
 
     DiabetesRepository(Application application) {
         DiabetesDatabase db = DiabetesDatabase.getDatabase(application);
         diabetesDao = db.diabetesDao();
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        bloodSugar = diabetesDao.getBloodSugar(cal.getTime(), Calendar.getInstance().getTime());
+        bloodSugarList = diabetesDao.getAllBloodSugar();
     }
 
-    LiveData<List<BloodSugar>> getBloodSugarByDate(Date beginDate, Date endDate)
+    LiveData<List<BloodSugar>> getAllBloodSugar()
     {
-        bloodSugar = diabetesDao.getBloodSugar(beginDate, endDate);
-        return bloodSugar;
+        return bloodSugarList;
     }
 
     void addBloodSugar(BloodSugar bloodSugar) {
-        DiabetesDatabase.databaseWriteExecutor.execute(() -> {
-            diabetesDao.insertBloodSugar(bloodSugar);
-        });
+        DiabetesDatabase.databaseWriteExecutor.execute(() -> diabetesDao.insertBloodSugar(bloodSugar));
     }
 }
