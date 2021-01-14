@@ -15,7 +15,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {BloodSugar.class}, version = 1, exportSchema = false)
+@Database(entities = {BloodSugar.class, Carb.class, Insulin.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class DiabetesDatabase extends RoomDatabase {
     public abstract DiabetesDao diabetesDao();

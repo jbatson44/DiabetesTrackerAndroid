@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-public class DataListAdapter extends ListAdapter<BloodSugar, DataViewHolder> {
-    public DataListAdapter(@NonNull DiffUtil.ItemCallback<BloodSugar> diffCallback) {
+public class BloodSugarListAdapter extends ListAdapter<BloodSugar, DataViewHolder> {
+    public BloodSugarListAdapter(@NonNull DiffUtil.ItemCallback<BloodSugar> diffCallback) {
         super(diffCallback);
     }
 
@@ -23,7 +23,9 @@ public class DataListAdapter extends ListAdapter<BloodSugar, DataViewHolder> {
     public void onBindViewHolder(DataViewHolder holder, int position) {
         BloodSugar current = getItem(position);
         DateFormat df = new SimpleDateFormat("h:mm a");
+
         holder.bind(current.getBsLevel() + " at " + df.format(current.getCreationDate()));
+
     }
 
     static class DataDiff extends DiffUtil.ItemCallback<BloodSugar> {

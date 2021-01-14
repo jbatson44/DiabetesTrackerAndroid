@@ -19,19 +19,20 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/bloodSugarLabel"
+        android:id="@+id/dataLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="28dp"
         android:text="@string/blood_sugar"
+        android:textAlignment="viewStart"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.119"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+        app:layout_constraintTop_toBottomOf="@+id/chooseBS" />
 
     <TextView
-        android:id="@+id/bloodSugarTimeLabel"
+        android:id="@+id/timeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -40,10 +41,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bloodSugarLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/dataLabel" />
 
     <TextView
-        android:id="@+id/bloodSugarTime"
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -51,31 +52,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.602"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bloodSugarInput" />
+        app:layout_constraintTop_toBottomOf="@+id/dataInput" />
 
     <EditText
-        android:id="@+id/bloodSugarInput"
+        android:id="@+id/dataInput"
         android:layout_width="180dp"
         android:layout_height="46dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="number"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.796"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+        app:layout_constraintTop_toBottomOf="@+id/chooseBS" />
 
     <Button
-        android:id="@+id/addBloodSugar"
-        android:layout_width="wrap_content"
+        android:id="@+id/addData"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/add_blood_sugar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bloodSugarTimeLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/timeLabel" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -85,8 +86,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addBloodSugar"
+        app:layout_constraintTop_toBottomOf="@+id/addData"
         app:layout_constraintVertical_bias="0.292" />
+
+    <Button
+        android:id="@+id/chooseBS"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Blood Sugar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+
+    <Button
+        android:id="@+id/chooseCarb"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Carbs"
+        app:layout_constraintStart_toEndOf="@+id/chooseBS"
+        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+
+    <Button
+        android:id="@+id/chooseInsulin"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Insulin"
+        app:layout_constraintEnd_toStartOf="@+id/chooseBS"
+        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

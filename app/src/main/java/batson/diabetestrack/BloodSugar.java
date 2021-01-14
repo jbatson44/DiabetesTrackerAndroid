@@ -8,7 +8,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "tbl_blood_sugar")
-public class BloodSugar {
+public class BloodSugar extends DataItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "ID")
     private Integer ID;

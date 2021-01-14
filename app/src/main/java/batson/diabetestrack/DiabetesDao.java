@@ -14,11 +14,19 @@ import androidx.room.Query;
 public interface DiabetesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertBloodSugar(BloodSugar bloodSugar);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertCarb(Carb carb);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertInsulin(Insulin insulin);
 
 
 
     @Query("SELECT * FROM tbl_blood_sugar")
     LiveData<List<BloodSugar>> getAllBloodSugar();
+    @Query("SELECT * FROM tbl_carb")
+    LiveData<List<Carb>> getAllCarb();
+    @Query("SELECT * FROM tbl_insulin")
+    LiveData<List<Insulin>> getAllInsulin();
 
     @Delete
     void deleteBloodSugar(BloodSugar bloodSugar);
