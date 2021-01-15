@@ -13,106 +13,92 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
     private DataViewModel dataViewModel;
-    private Date chosenDate;
+    private LocalDate chosenDate;
     private DataType currentData;
     private Button insulinButton;
     private Button bloodSugarButton;
     private Button carbButton;
     private Button addData;
+    private Button incrementDate;
+    private Button decrementDate;
+
     private TextView dataLabel;
     private TextView timeLabel;
     private TextView time;
+    private TextView chosenDateText;
     private EditText dataInput;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        chosenDate = Calendar.getInstance().getTime();
-        currentData = DataType.bloodSugar;
 
+        // Buttons
         insulinButton = findViewById(R.id.chooseInsulin);
         bloodSugarButton = findViewById(R.id.chooseBS);
         carbButton = findViewById(R.id.chooseCarb);
+        incrementDate = findViewById(R.id.incrementDate);
+        decrementDate = findViewById(R.id.decrementDate);
 
-
+        // Add data button
         addData = findViewById(R.id.addData);
 
+        // Label's and input fields
         dataLabel = findViewById(R.id.dataLabel);
         timeLabel = findViewById(R.id.timeLabel);
         time = findViewById(R.id.time);
         dataInput = findViewById(R.id.dataInput);
 
+        // Recycler view
+        recyclerView = findViewById(R.id.recyclerView);
 
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        final BloodSugarListAdapter adapter = new BloodSugarListAdapter(new BloodSugarListAdapter.DataDiff());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        // By default we use the current date and Blood Sugar
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+        chosenDate = LocalDate.now();
+        currentData = DataType.bloodSugar;
+        SwitchInput(DataType.bloodSugar);
 
-        dataViewModel.getBloodSugar().observe(this, data -> {
-            // Update the cached copy of the words in the adapter.
-            adapter.submitList(data);
+
+        chosenDateText = findViewById(R.id.chosenDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy", Locale.ENGLISH);
+        chosenDateText.setText(formatter.format(LocalDate.now()));
+
+
+        // Set time to current time
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
+        time.setText(timeFormat.format(LocalDateTime.now()));
+
+        incrementDate.setOnClickListener(v -> {
+            IncrementDecrementDate(true);
         });
-
-        TextView date = findViewById(R.id.chosenDate);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yy");
-        date.setText(dateFormat.format(Calendar.getInstance().getTime()));
-
-        //TextView time = findViewById(R.id.time);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        time.setText(timeFormat.format(Calendar.getInstance().getTime()));
-
+        decrementDate.setOnClickListener(v -> {
+            IncrementDecrementDate(false);
+        });
 
         insulinButton.setOnClickListener(v -> {
-            dataLabel.setText("Insulin: ");
-            addData.setText("Add Insulin");
-
-            final InsulinListAdapter insulinAdapter = new InsulinListAdapter(new InsulinListAdapter.DataDiff());
-            recyclerView.setAdapter(insulinAdapter);
-
-            dataViewModel.getInsulin().observe(this, data -> {
-                // Update the cached copy of the words in the adapter.
-                insulinAdapter.submitList(data);
-            });
-
-            currentData = DataType.insulin;
+            SwitchInput(DataType.insulin);
         });
         bloodSugarButton.setOnClickListener(v -> {
-            dataLabel.setText(R.string.blood_sugar);
-            addData.setText(R.string.add_blood_sugar);
-
-            recyclerView.setAdapter(adapter);
-            dataViewModel.getBloodSugar().observe(this, data -> {
-                // Update the cached copy of the words in the adapter.
-                adapter.submitList(data);
-            });
-            currentData = DataType.bloodSugar;
+            SwitchInput(DataType.bloodSugar);
         });
         carbButton.setOnClickListener(v -> {
-            dataLabel.setText("Carbs: ");
-            addData.setText("Add Carbs");
-
-            final CarbListAdapter carbAdapter = new CarbListAdapter(new CarbListAdapter.DataDiff());
-            recyclerView.setAdapter(carbAdapter);
-
-            dataViewModel.getCarbs().observe(this, data -> {
-                // Update the cached copy of the words in the adapter.
-                carbAdapter.submitList(data);
-            });
-            currentData = DataType.carb;
+            SwitchInput(DataType.carb);
         });
+
         time.setOnClickListener(v -> {
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR_OF_DAY);
@@ -151,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             //EditText bsInput = findViewById(R.id.dataInput);
             //TextView bsTime = findViewById(R.id.time);
             int input = Integer.parseInt(dataInput.getText().toString());
-            Date bsDate = chosenDate;
+            //Date bsDate = chosenDate;
 
             String amPm = time.getText().toString().split(":")[1].split(" ")[1];
 
@@ -168,21 +154,22 @@ public class MainActivity extends AppCompatActivity {
             }
             Log.d("activity", "hours: " + hours);
 
-            bsDate.setHours(hours);
-            bsDate.setMinutes(minutes);
-
+            LocalDateTime localDateTime = chosenDate.atTime(hours, minutes);
+            //bsDate.setHours(hours);
+            //bsDate.setMinutes(minutes);
+            Log.d("activity", "Date: " + localDateTime.toString());
             if (currentData == DataType.bloodSugar) {
-                BloodSugar bloodSugar = new BloodSugar(input, bsDate);
+                BloodSugar bloodSugar = new BloodSugar(input, localDateTime);
 
                 dataViewModel.insertBloodSugar(bloodSugar);
             }
             else if (currentData == DataType.carb) {
-                Carb carb = new Carb(input, bsDate);
+                Carb carb = new Carb(input, localDateTime);
 
                 dataViewModel.insertCarb(carb);
             }
             else if (currentData == DataType.insulin) {
-                Insulin insulin = new Insulin(input, bsDate);
+                Insulin insulin = new Insulin(input, localDateTime);
 
                 dataViewModel.insertInsulin(insulin);
             }
@@ -190,5 +177,81 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void SwitchInput(DataType newDataType) {
 
+        UpdateList(newDataType);
+        if (newDataType == DataType.bloodSugar) {
+            dataLabel.setText(R.string.blood_sugar);
+            addData.setText(R.string.add_blood_sugar);
+
+            currentData = DataType.bloodSugar;
+        }
+        else if (newDataType == DataType.carb) {
+            dataLabel.setText(R.string.carb);
+            addData.setText(R.string.add_carb);
+
+            currentData = DataType.carb;
+        }
+        else if (newDataType == DataType.insulin) {
+            dataLabel.setText(R.string.insulin);
+            addData.setText(R.string.add_insulin);
+
+            currentData = DataType.insulin;
+        }
+    }
+
+    public void IncrementDecrementDate(boolean increment) {
+
+        if (increment) {
+            chosenDate = chosenDate.plusDays(1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy", Locale.ENGLISH);
+            chosenDateText.setText(formatter.format(chosenDate));
+        }
+        else {
+            chosenDate = chosenDate.minusDays(1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy", Locale.ENGLISH);
+            chosenDateText.setText(formatter.format(chosenDate));
+        }
+
+        Log.d("activity", "Date: " + chosenDate);
+        Log.d("activity", "Today: " + LocalDate.now());
+        if (chosenDate.isEqual(LocalDate.now())) {
+            incrementDate.setEnabled(false);
+        }
+        else {
+            incrementDate.setEnabled(true);
+        }
+        UpdateList(currentData);
+    }
+
+
+    public void UpdateList(DataType dataType) {
+        if (dataType == DataType.bloodSugar) {
+            final BloodSugarListAdapter bloodSugarAdapter = new BloodSugarListAdapter(new BloodSugarListAdapter.DataDiff());
+            recyclerView.setAdapter(bloodSugarAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            // Update the cached copy of the words in the adapter.
+            dataViewModel.getBloodSugarByDates(chosenDate.atTime(0,0),
+                    chosenDate.plusDays(1).atTime(0,0)).observe(this, bloodSugarAdapter::submitList);
+        }
+        else if (dataType == DataType.carb) {
+            final CarbListAdapter carbAdapter = new CarbListAdapter(new CarbListAdapter.DataDiff());
+            recyclerView.setAdapter(carbAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            // Update the cached copy of the words in the adapter.
+            dataViewModel.getCarbByDates(chosenDate.atTime(0,0),
+                    chosenDate.plusDays(1).atTime(0,0)).observe(this, carbAdapter::submitList);
+        }
+        else if (dataType == DataType.insulin) {
+            final InsulinListAdapter insulinAdapter = new InsulinListAdapter(new InsulinListAdapter.DataDiff());
+            recyclerView.setAdapter(insulinAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            // Update the cached copy of the words in the adapter.
+            dataViewModel.getInsulinByDates(chosenDate.atTime(0,0),
+                    chosenDate.plusDays(1).atTime(0,0)).observe(this, insulinAdapter::submitList);
+        }
+    }
 }

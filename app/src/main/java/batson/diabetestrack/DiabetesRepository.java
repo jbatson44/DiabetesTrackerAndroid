@@ -2,6 +2,7 @@ package batson.diabetestrack;
 
 import android.app.Application;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,19 @@ public class DiabetesRepository {
     LiveData<List<Insulin>> getAllInsulin()
     {
         return insulinList;
+    }
+
+    LiveData<List<BloodSugar>> getBloodSugarByDates(LocalDateTime beginTime, LocalDateTime endTime)
+    {
+        return diabetesDao.getBloodSugar(beginTime, endTime);
+    }
+    LiveData<List<Carb>> getCarbByDates(LocalDateTime beginTime, LocalDateTime endTime)
+    {
+        return diabetesDao.getCarb(beginTime, endTime);
+    }
+    LiveData<List<Insulin>> getInsulinByDates(LocalDateTime beginTime, LocalDateTime endTime)
+    {
+        return diabetesDao.getInsulin(beginTime, endTime);
     }
 
     void addBloodSugar(BloodSugar bloodSugar) {

@@ -4,6 +4,9 @@ import android.view.ViewGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -22,10 +25,11 @@ public class BloodSugarListAdapter extends ListAdapter<BloodSugar, DataViewHolde
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
         BloodSugar current = getItem(position);
-        DateFormat df = new SimpleDateFormat("h:mm a");
-
-        holder.bind(current.getBsLevel() + " at " + df.format(current.getCreationDate()));
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
+        DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
+                Locale.ENGLISH);
+        holder.bind(fullFormat.format(current.getCreationDate()) + ": " + current.getBsLevel()
+                + " blood sugar level.");
     }
 
     static class DataDiff extends DiffUtil.ItemCallback<BloodSugar> {

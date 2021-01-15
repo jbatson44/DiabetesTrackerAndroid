@@ -2,6 +2,7 @@ package batson.diabetestrack;
 
 import android.content.Context;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -52,7 +53,7 @@ public abstract class DiabetesDatabase extends RoomDatabase {
                 DiabetesDao dao = INSTANCE.diabetesDao();
                 dao.deleteAll();
 
-                BloodSugar bloodSugar = new BloodSugar(98, Calendar.getInstance().getTime());
+                BloodSugar bloodSugar = new BloodSugar(98, LocalDateTime.now());
                 dao.insertBloodSugar(bloodSugar);
             });
         }

@@ -1,5 +1,6 @@
 package batson.diabetestrack;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import androidx.room.ColumnInfo;
@@ -20,16 +21,16 @@ public class Insulin extends DataItem {
     private int units;
 
     @ColumnInfo(name = "creation_date")
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
-    public Insulin(int units, Date creationDate) {
+    public Insulin(int units, LocalDateTime creationDate) {
         this.units = units;
         this.creationDate = creationDate;
     }
 
     public int getUnits() { return units; }
 
-    public Date getCreationDate() { return creationDate; }
+    public LocalDateTime getCreationDate() { return creationDate; }
 
     public Integer getID() { return ID; }
 }

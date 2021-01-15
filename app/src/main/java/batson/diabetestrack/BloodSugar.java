@@ -1,5 +1,6 @@
 package batson.diabetestrack;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -21,16 +22,16 @@ public class BloodSugar extends DataItem {
     private int bsLevel;
 
     @ColumnInfo(name = "creation_date")
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
-    public BloodSugar(int bsLevel, Date creationDate) {
+    public BloodSugar(int bsLevel, LocalDateTime creationDate) {
         this.bsLevel = bsLevel;
         this.creationDate = creationDate;
     }
 
     public int getBsLevel() { return bsLevel; }
 
-    public Date getCreationDate() { return creationDate; }
+    public LocalDateTime getCreationDate() { return creationDate; }
 
     public Integer getID() { return ID; }
 }
