@@ -100,9 +100,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         time.setOnClickListener(v -> {
+            String timeString = time.getText().toString();
+            Log.d("activity", "time edit: " + timeString);
+            System.out.println("time string: " + timeString);
+            String hourString = timeString.split(":")[0];
+            String minAmString = timeString.split(":")[1];
+            String am = minAmString.split(" ")[1];
+
             final Calendar cldr = Calendar.getInstance();
-            int hour = cldr.get(Calendar.HOUR_OF_DAY);
-            int minutes = cldr.get(Calendar.MINUTE);
+            int hour = Integer.parseInt(hourString);//cldr.get(Calendar.HOUR_OF_DAY);//
+            int minutes = Integer.parseInt(minAmString.split(" ")[0]);//cldr.get(Calendar.MINUTE);//Integer.parseInt(minAmString.split(" ")[0]);//
+            if (am.equals("PM")) {
+                hour += 12;
+            }
             // time picker dialog
             TimePickerDialog picker = new TimePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
                     (tp, sHour, sMinute) -> {
