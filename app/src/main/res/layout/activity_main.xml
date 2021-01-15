@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Spinner
+        android:id="@+id/dropDownSelect"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+
     <Button
         android:id="@+id/addData"
         android:layout_width="130dp"
@@ -16,36 +28,6 @@
         app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeLabel" />
-
-    <Button
-        android:id="@+id/chooseBS"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Blood Sugar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
-
-    <Button
-        android:id="@+id/chooseCarb"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Carbs"
-        app:layout_constraintStart_toEndOf="@+id/chooseBS"
-        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
-
-    <Button
-        android:id="@+id/chooseInsulin"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Insulin"
-        app:layout_constraintEnd_toStartOf="@+id/chooseBS"
-        app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
 
     <Button
         android:id="@+id/decrementDate"
@@ -75,14 +57,14 @@
         android:id="@+id/dataInput"
         android:layout_width="180dp"
         android:layout_height="46dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="number"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.796"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseBS" />
+        app:layout_constraintTop_toBottomOf="@+id/dropDownSelect" />
 
     <TextView
         android:id="@+id/chosenDate"
@@ -100,14 +82,14 @@
         android:id="@+id/dataLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:text="@string/blood_sugar"
         android:textAlignment="viewStart"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.119"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseBS" />
+        app:layout_constraintTop_toBottomOf="@+id/dropDownSelect" />
 
     <TextView
         android:id="@+id/timeLabel"

@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -28,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
     private DataViewModel dataViewModel;
     private LocalDate chosenDate;
     private DataType currentData;
-    private Button insulinButton;
-    private Button bloodSugarButton;
-    private Button carbButton;
+
     private Button addData;
     private Button incrementDate;
     private Button decrementDate;
+
+    private Spinner dropDown;
 
     private TextView dataLabel;
     private TextView timeLabel;
@@ -47,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set up data select drop down menu
+        dropDown = findViewById(R.id.dropDownSelect);
+        String[] dataTypeList = new String[] {"Blood Sugar", "Insulin", "Carb"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, dataTypeList);
+        dropDown.setAdapter(adapter);
+
         // Buttons
-        insulinButton = findViewById(R.id.chooseInsulin);
-        bloodSugarButton = findViewById(R.id.chooseBS);
-        carbButton = findViewById(R.id.chooseCarb);
         incrementDate = findViewById(R.id.incrementDate);
         decrementDate = findViewById(R.id.decrementDate);
 
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         currentData = DataType.bloodSugar;
         SwitchInput(DataType.bloodSugar);
 
-
+        // Set the chosen date to be the devices current date
         chosenDateText = findViewById(R.id.chosenDate);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy", Locale.ENGLISH);
         chosenDateText.setText(formatter.format(LocalDate.now()));
@@ -82,22 +89,26 @@ public class MainActivity extends AppCompatActivity {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
         time.setText(timeFormat.format(LocalDateTime.now()));
 
-        incrementDate.setOnClickListener(v -> {
-            IncrementDecrementDate(true);
-        });
-        decrementDate.setOnClickListener(v -> {
-            IncrementDecrementDate(false);
+        dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = dropDown.getSelectedItem().toString();
+
+                SwitchInput(stringToDataType(selectedItemText));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                dropDown.setSelection(0);
+
+                String selectedItemText = dropDown.getSelectedItem().toString();
+
+                SwitchInput(stringToDataType(selectedItemText));
+            }
         });
 
-        insulinButton.setOnClickListener(v -> {
-            SwitchInput(DataType.insulin);
-        });
-        bloodSugarButton.setOnClickListener(v -> {
-            SwitchInput(DataType.bloodSugar);
-        });
-        carbButton.setOnClickListener(v -> {
-            SwitchInput(DataType.carb);
-        });
+        incrementDate.setOnClickListener(v -> IncrementDecrementDate(true));
+        decrementDate.setOnClickListener(v -> IncrementDecrementDate(false));
 
         time.setOnClickListener(v -> {
             String timeString = time.getText().toString();
@@ -141,68 +152,87 @@ public class MainActivity extends AppCompatActivity {
             picker.show();
         });
 
-        //Button addBloodSugar = findViewById(R.id.addData);
         addData.setOnClickListener(v -> {
 
-            //EditText bsInput = findViewById(R.id.dataInput);
-            //TextView bsTime = findViewById(R.id.time);
             int input = Integer.parseInt(dataInput.getText().toString());
-            //Date bsDate = chosenDate;
 
             String amPm = time.getText().toString().split(":")[1].split(" ")[1];
 
             int hours = Integer.parseInt(time.getText().toString().split(":")[0]);
             int minutes = Integer.parseInt(time.getText().toString().split(":")[1].split(" ")[0]);
-            Log.d("activity", "ampm:" + amPm + "!");
-            Log.d("activity", "hours: " + hours);
+
             if (amPm.equals("PM")) {
                 hours += 12;
-                Log.d("activity", "hours: " + hours);
             }
             else if (hours == 12) {
                 hours = 0;
             }
-            Log.d("activity", "hours: " + hours);
+
+            if (hours == 24) {
+                hours = 12;
+            }
 
             LocalDateTime localDateTime = chosenDate.atTime(hours, minutes);
-            //bsDate.setHours(hours);
-            //bsDate.setMinutes(minutes);
+
             Log.d("activity", "Date: " + localDateTime.toString());
             if (currentData == DataType.bloodSugar) {
-                BloodSugar bloodSugar = new BloodSugar(input, localDateTime);
 
+                BloodSugar bloodSugar = new BloodSugar(input, localDateTime);
                 dataViewModel.insertBloodSugar(bloodSugar);
             }
             else if (currentData == DataType.carb) {
-                Carb carb = new Carb(input, localDateTime);
 
+                Carb carb = new Carb(input, localDateTime);
                 dataViewModel.insertCarb(carb);
             }
             else if (currentData == DataType.insulin) {
-                Insulin insulin = new Insulin(input, localDateTime);
 
+                Insulin insulin = new Insulin(input, localDateTime);
                 dataViewModel.insertInsulin(insulin);
             }
 
         });
     }
 
+    public DataType stringToDataType(String dataString) {
+
+        DataType dataType = DataType.bloodSugar;
+
+        switch (dataString) {
+            case "Blood Sugar":
+                dataType = DataType.bloodSugar;
+                break;
+            case "Carb":
+                dataType = DataType.carb;
+                break;
+            case "Insulin":
+                dataType = DataType.insulin;
+                break;
+        }
+
+        return dataType;
+    }
+
     public void SwitchInput(DataType newDataType) {
 
         UpdateList(newDataType);
+
         if (newDataType == DataType.bloodSugar) {
+
             dataLabel.setText(R.string.blood_sugar);
             addData.setText(R.string.add_blood_sugar);
 
             currentData = DataType.bloodSugar;
         }
         else if (newDataType == DataType.carb) {
+
             dataLabel.setText(R.string.carb);
             addData.setText(R.string.add_carb);
 
             currentData = DataType.carb;
         }
         else if (newDataType == DataType.insulin) {
+
             dataLabel.setText(R.string.insulin);
             addData.setText(R.string.add_insulin);
 
@@ -223,14 +253,9 @@ public class MainActivity extends AppCompatActivity {
             chosenDateText.setText(formatter.format(chosenDate));
         }
 
-        Log.d("activity", "Date: " + chosenDate);
-        Log.d("activity", "Today: " + LocalDate.now());
-        if (chosenDate.isEqual(LocalDate.now())) {
-            incrementDate.setEnabled(false);
-        }
-        else {
-            incrementDate.setEnabled(true);
-        }
+        // We don't want to increment past today's date
+        incrementDate.setEnabled(!chosenDate.isEqual(LocalDate.now()));
+
         UpdateList(currentData);
     }
 
