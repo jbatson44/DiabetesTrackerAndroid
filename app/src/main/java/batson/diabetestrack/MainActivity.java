@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         // Set up data select drop down menu
         dropDown = findViewById(R.id.dropDownSelect);
         String[] dataTypeList = new String[] {"Blood Sugar", "Insulin", "Carb"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, dataTypeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, dataTypeList);
         dropDown.setAdapter(adapter);
 
         // Buttons
@@ -154,7 +155,12 @@ public class MainActivity extends AppCompatActivity {
 
         addData.setOnClickListener(v -> {
 
-            int input = Integer.parseInt(dataInput.getText().toString());
+            int input;
+            try {
+                input = Integer.parseInt(dataInput.getText().toString());
+            } catch (NumberFormatException e) {
+                return;
+            }
 
             String amPm = time.getText().toString().split(":")[1].split(" ")[1];
 

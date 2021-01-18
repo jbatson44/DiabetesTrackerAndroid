@@ -28,7 +28,7 @@ public class BloodSugarListAdapter extends ListAdapter<BloodSugar, DataViewHolde
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
         DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
                 Locale.ENGLISH);
-        holder.bind(fullFormat.format(current.getCreationDate()) + ": " + current.getBsLevel()
+        holder.bind(formatter.format(current.getCreationDate()) + ": " + current.getBsLevel()
                 + " blood sugar level.");
     }
 

@@ -27,7 +27,7 @@ public class CarbListAdapter extends ListAdapter<Carb, DataViewHolder> {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
         DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
                 Locale.ENGLISH);
-        holder.bind(fullFormat.format(current.getCreationDate()) + ": " + current.getGrams()
+        holder.bind(formatter.format(current.getCreationDate()) + ": " + current.getGrams()
                 + " carbs eaten");
     }
 
