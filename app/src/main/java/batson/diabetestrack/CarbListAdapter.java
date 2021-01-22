@@ -28,7 +28,7 @@ public class CarbListAdapter extends ListAdapter<Carb, DataViewHolder> {
         DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
                 Locale.ENGLISH);
         holder.bind(formatter.format(current.getCreationDate()) + ": " + current.getGrams()
-                + " carbs eaten");
+                + " carbs eaten",current.getID() + " " + "C");
     }
 
     static class DataDiff extends DiffUtil.ItemCallback<Carb> {

@@ -15,13 +15,18 @@ public class DataViewHolder extends RecyclerView.ViewHolder {
         dataItemView = itemView.findViewById(R.id.textView);
     }
 
-    public void bind(String text) {
+    public void bind(String text, String hint) {
         dataItemView.setText(text);
+        dataItemView.setHint(hint);
     }
 
     static DataViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_item, parent, false);
         return new DataViewHolder(view);
+    }
+
+    public void delete(View view) {
+
     }
 }

@@ -45,4 +45,10 @@ public class DataViewModel extends AndroidViewModel {
     public void insertBloodSugar(BloodSugar bloodSugar) { diabetesRepository.addBloodSugar(bloodSugar); }
     public void insertCarb(Carb carb) { diabetesRepository.addCarb(carb); }
     public void insertInsulin(Insulin insulin) { diabetesRepository.addInsulin(insulin); }
+
+    public void deleteBloodSugar(BloodSugar bloodSugar) { diabetesRepository.DeleteBloodSugar(bloodSugar); }
+
+    void deleteBloodSugarById(int id) { diabetesRepository.deleteBloodSugarById(id); }
+    void deleteCarbById(int id) { diabetesRepository.deleteCarbById(id); }
+    void deleteInsulinById(int id) { diabetesRepository.deleteInsulinById(id); }
 }

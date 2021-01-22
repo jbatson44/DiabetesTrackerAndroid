@@ -29,7 +29,7 @@ public class BloodSugarListAdapter extends ListAdapter<BloodSugar, DataViewHolde
         DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
                 Locale.ENGLISH);
         holder.bind(formatter.format(current.getCreationDate()) + ": " + current.getBsLevel()
-                + " blood sugar level.");
+                + " blood sugar level.", current.getID() + " " + "B");
     }
 
     static class DataDiff extends DiffUtil.ItemCallback<BloodSugar> {

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.TimePickerDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -294,5 +296,28 @@ public class MainActivity extends AppCompatActivity {
             dataViewModel.getInsulinByDates(chosenDate.atTime(0,0),
                     chosenDate.plusDays(1).atTime(0,0)).observe(this, insulinAdapter::submitList);
         }
+    }
+
+    public void deleteWords(View view) {
+        Toast toast;// = Toast.makeText(getApplicationContext(), "words", Toast.LENGTH_LONG);
+        //toast.show();
+
+        TextView realView = (TextView) view;
+        int id = Integer.parseInt(realView.getHint().toString().split(" ")[0]);
+        String typeToDelete = realView.getHint().toString().split(" ")[1];
+
+        toast = Toast.makeText(getApplicationContext(), String.valueOf(id + typeToDelete), Toast.LENGTH_LONG);
+        toast.show();
+
+
+        switch (typeToDelete) {
+            case "B":
+                AsyncTask.execute(() -> dataViewModel.deleteBloodSugarById(id));
+            case "I":
+                AsyncTask.execute(() -> dataViewModel.deleteInsulinById(id));
+            case "C":
+                AsyncTask.execute(() -> dataViewModel.deleteCarbById(id));
+        }
+
     }
 }

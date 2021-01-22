@@ -28,7 +28,7 @@ public class InsulinListAdapter extends ListAdapter<Insulin, DataViewHolder> {
         DateTimeFormatter fullFormat = DateTimeFormatter.ofPattern("M/d/yy h:mm a",
                 Locale.ENGLISH);
         holder.bind(formatter.format(current.getCreationDate()) + ": " + current.getUnits()
-                + " units.");
+                + " units.",current.getID() + " " + "I");
     }
 
     static class DataDiff extends DiffUtil.ItemCallback<Insulin> {

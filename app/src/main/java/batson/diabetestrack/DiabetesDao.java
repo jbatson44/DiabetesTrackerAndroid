@@ -45,6 +45,12 @@ public interface DiabetesDao {
     LiveData<List<Insulin>> getInsulin(LocalDateTime beginTime, LocalDateTime endTime);
 
 
+    @Query("DELETE FROM tbl_carb WHERE ID = :id")
+    void deleteCarbById(int id);
+    @Query("DELETE FROM tbl_blood_sugar WHERE ID = :id")
+    void deleteBloodSugarById(int id);
+    @Query("DELETE FROM tbl_insulin WHERE ID = :id")
+    void deleteInsulinById(int id);
 
     @Delete
     void deleteCarb(Carb carb);

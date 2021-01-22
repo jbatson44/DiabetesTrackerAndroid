@@ -61,4 +61,12 @@ public class DiabetesRepository {
     void addInsulin(Insulin insulin) {
         DiabetesDatabase.databaseWriteExecutor.execute(() -> diabetesDao.insertInsulin(insulin));
     }
+
+    void DeleteBloodSugar(BloodSugar bloodSugar) {
+        diabetesDao.deleteBloodSugar(bloodSugar);
+    }
+
+    void deleteBloodSugarById(int id) { diabetesDao.deleteBloodSugarById(id); }
+    void deleteCarbById(int id) { diabetesDao.deleteCarbById(id); }
+    void deleteInsulinById(int id) { diabetesDao.deleteInsulinById(id); }
 }
