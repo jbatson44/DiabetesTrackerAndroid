@@ -9,11 +9,16 @@ import android.app.TimePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView chosenDateText;
     private EditText dataInput;
     private RecyclerView recyclerView;
+
+    private View popup;
+    private String typeToDelete;
+    private int idToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,26 +307,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteWords(View view) {
-        Toast toast;// = Toast.makeText(getApplicationContext(), "words", Toast.LENGTH_LONG);
-        //toast.show();
-
+    public void deletePopup(View view) {
         TextView realView = (TextView) view;
-        int id = Integer.parseInt(realView.getHint().toString().split(" ")[0]);
-        String typeToDelete = realView.getHint().toString().split(" ")[1];
+        idToDelete = Integer.parseInt(realView.getHint().toString().split(" ")[0]);
+        typeToDelete = realView.getHint().toString().split(" ")[1];
 
-        toast = Toast.makeText(getApplicationContext(), String.valueOf(id + typeToDelete), Toast.LENGTH_LONG);
-        toast.show();
+        LayoutInflater inflater = getLayoutInflater();
+        popup = inflater.inflate(R.layout.delete_popup, null);
 
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popup, width, height, focusable);
 
-        switch (typeToDelete) {
-            case "B":
-                AsyncTask.execute(() -> dataViewModel.deleteBloodSugarById(id));
-            case "I":
-                AsyncTask.execute(() -> dataViewModel.deleteInsulinById(id));
-            case "C":
-                AsyncTask.execute(() -> dataViewModel.deleteCarbById(id));
-        }
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        TextView text = findViewById(R.id.deletePopupText);
+        Button yes = findViewById(R.id.yesButton);
+        Button no = findViewById(R.id.noButton);
 
     }
+
+    public void confirmDelete(View view) {
+        switch (typeToDelete) {
+            case "B":
+                AsyncTask.execute(() -> dataViewModel.deleteBloodSugarById(idToDelete));
+            case "I":
+                AsyncTask.execute(() -> dataViewModel.deleteInsulinById(idToDelete));
+            case "C":
+                AsyncTask.execute(() -> dataViewModel.deleteCarbById(idToDelete));
+        }
+        ((ViewGroup) popup.getParent()).removeView(popup);
+    }
+
+    public void closeDeletePopup(View v) {
+        ((ViewGroup) popup.getParent()).removeView(popup);
+    }
+
 }
