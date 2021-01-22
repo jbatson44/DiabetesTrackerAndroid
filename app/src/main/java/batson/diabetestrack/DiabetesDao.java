@@ -35,13 +35,16 @@ public interface DiabetesDao {
     @Query("DELETE FROM tbl_blood_sugar")
     void deleteAll();
 
-    @Query("SELECT * FROM tbl_blood_sugar WHERE creation_date >= :beginTime AND creation_date <= :endTime")
+    @Query("SELECT * FROM tbl_blood_sugar WHERE creation_date >= :beginTime AND " +
+            "creation_date <= :endTime ORDER BY creation_date ASC")
     LiveData<List<BloodSugar>> getBloodSugar(LocalDateTime beginTime, LocalDateTime endTime);
 
-    @Query("SELECT * FROM tbl_carb WHERE creation_date >= :beginTime AND creation_date <= :endTime")
+    @Query("SELECT * FROM tbl_carb WHERE creation_date >= :beginTime AND " +
+            "creation_date <= :endTime ORDER BY creation_date ASC")
     LiveData<List<Carb>> getCarb(LocalDateTime beginTime, LocalDateTime endTime);
 
-    @Query("SELECT * FROM tbl_insulin WHERE creation_date >= :beginTime AND creation_date <= :endTime")
+    @Query("SELECT * FROM tbl_insulin WHERE creation_date >= :beginTime AND " +
+            "creation_date <= :endTime ORDER BY creation_date ASC")
     LiveData<List<Insulin>> getInsulin(LocalDateTime beginTime, LocalDateTime endTime);
 
 
